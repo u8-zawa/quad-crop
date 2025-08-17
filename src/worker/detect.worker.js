@@ -1,4 +1,12 @@
 let cvReady = false;
+const baseURL = (() => {
+  const u = new URL(self.location.href);
+  u.pathname = u.pathname.replace(/[^/]+$/, '');
+  if (u.pathname.endsWith('assets/')) {
+    u.pathname = u.pathname.slice(0, -7);
+  }
+  return u;
+})();
 self.Module = {
     onRuntimeInitialized() {
         cvReady = true;
@@ -6,7 +14,7 @@ self.Module = {
         console.log('[detect] OpenCV ready');
     }
 };
-importScripts('/opencv.js');
+importScripts(new URL('opencv.js', baseURL).href);
 
 // tl,tr,br,bl に並べ替え
 function orderQuad(pts) {
